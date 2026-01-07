@@ -5,6 +5,7 @@ import { SearchCity } from '@/components/SearchCity';
 import { WeatherCard } from '@/components/WeatherCard';
 import { getCurrentWeather } from '@/services/weather';
 import { WeatherResponse } from '@/types/weather';
+import { WeatherDetails } from '@/components/WeatherDetails';
 
 export default function Home() {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
@@ -51,6 +52,7 @@ export default function Home() {
       {weather && (
       <div className="mt-10 w-full max-w-md rounded-3xl bg-white/15 backdrop-blur p-8">
         <WeatherCard weather={weather} />
+        <WeatherDetails weather={weather} />
       </div>
 )}
     </main>

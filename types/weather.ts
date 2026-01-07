@@ -18,3 +18,21 @@ export interface WeatherResponse {
   weather: Weather[];
   main: MainWeather;
 }
+
+export interface Sys {
+  sunrise: number;
+  sunset: number;
+}
+
+export interface Wind {
+  speed: number;
+}
+
+export interface WeatherResponse {
+  name: string;
+  weather: Weather[];
+  main: MainWeather;
+  wind: Wind;
+  visibility: number;
+  sys: Sys;
+}
