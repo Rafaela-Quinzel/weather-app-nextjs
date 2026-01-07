@@ -12,6 +12,7 @@ import { Forecast } from '@/components/Forecast';
 import { getCurrentWeather, getCurrentWeatherByCoords, getForecast, getForecastByCoords } from '@/services/weather';
 import { ForecastResponse, WeatherResponse } from '@/types/weather';
 import { getUserLocation } from '@/utils/geolocation';
+import { isDaytime } from '@/utils/isDaytime';
 
 export default function Home() {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
@@ -27,37 +28,37 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-  async function loadDefaultWeather() {
-    setIsLoading(true);
-    setError('');
+    async function loadDefaultWeather() {
+      setIsLoading(true);
+      setError('');
 
-    try {
-      // 1️⃣ Tenta localização do usuário
-      const position = await getUserLocation();
-      const { latitude, longitude } = position.coords;
-
-      const weatherData = await getCurrentWeatherByCoords(latitude, longitude);
-      const forecastData = await getForecastByCoords(latitude, longitude);
-
-      setWeather(weatherData);
-      setForecast(forecastData);
-    } catch {
-      // 2️⃣ Fallback se negar permissão ou falhar
       try {
-        const weatherData = await getCurrentWeather('São Paulo');
-        const forecastData = await getForecast('São Paulo');
+        // 1️⃣ Tenta localização do usuário
+        const position = await getUserLocation();
+        const { latitude, longitude } = position.coords;
+
+        const weatherData = await getCurrentWeatherByCoords(latitude, longitude);
+        const forecastData = await getForecastByCoords(latitude, longitude);
 
         setWeather(weatherData);
         setForecast(forecastData);
       } catch {
-        setError('Não foi possível carregar o clima inicial.');
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }
+        // 2️⃣ Fallback se negar permissão ou falhar
+        try {
+          const weatherData = await getCurrentWeather('São Paulo');
+          const forecastData = await getForecast('São Paulo');
 
-  loadDefaultWeather();
+          setWeather(weatherData);
+          setForecast(forecastData);
+        } catch {
+          setError('Não foi possível carregar o clima inicial.');
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadDefaultWeather();
 }, []);
 
   async function handleSearch(city: string) {
@@ -79,18 +80,28 @@ export default function Home() {
     }
   }
 
-  function getBackgroundGradient(hour: number) {
-    if (hour >= 5 && hour < 8) return 'from-orange-400 via-rose-500 to-purple-600';
-    if (hour >= 8 && hour < 17) return 'from-blue-400 via-blue-500 to-indigo-600';
-    if (hour >= 17 && hour < 20) return 'from-orange-500 via-pink-500 to-purple-700';
-    return 'from-indigo-900 via-purple-900 to-slate-900';
+  function getBackgroundGradient() {
+    if (!weather) return 'from-blue-400 via-blue-500 to-indigo-600';
+
+    const now = Date.now() / 1000 + weather.timezone;
+    const { sunrise, sunset } = weather.sys;
+
+    if (now >= sunrise - 1800 && now < sunrise + 1800) {
+      return 'from-orange-400 via-rose-500 to-purple-600'; // amanhecer
+    }
+
+    if (now >= sunset - 1800 && now < sunset + 1800) {
+      return 'from-orange-500 via-pink-500 to-purple-700'; // pôr do sol
+    }
+
+    return now >= sunrise && now < sunset
+      ? 'from-sky-400 via-blue-500 to-indigo-600'
+      : 'from-slate-900 via-indigo-900 to-black';
   }
 
   return (
     <main
-      className={`min-h-screen bg-gradient-to-br ${getBackgroundGradient(
-        currentTime.getHours()
-      )} transition-all duration-1000 text-white`}
+    className={`min-h-screen bg-gradient-to-br ${getBackgroundGradient()} transition-all duration-1000 text-white`}
     >
       <div className="relative z-10 flex flex-col items-center px-4 py-10">
 
