@@ -6,18 +6,26 @@ import { WeatherCard } from '@/components/WeatherCard';
 import { getCurrentWeather } from '@/services/weather';
 import { WeatherResponse } from '@/types/weather';
 import { WeatherDetails } from '@/components/WeatherDetails';
+import { getForecast } from '@/services/weather';
+import { ForecastResponse } from '@/types/weather';
+import { Forecast } from '@/components/Forecast';
 
 export default function Home() {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
   const [error, setError] = useState('');
+  const [forecast, setForecast] = useState<ForecastResponse | null>(null);
 
   async function handleSearch(city: string) {
     try {
       setError('');
-      const data = await getCurrentWeather(city);
-      setWeather(data);
+      const weatherData = await getCurrentWeather(city);
+      const forecastData = await getForecast(city);
+
+      setWeather(weatherData);
+      setForecast(forecastData);
     } catch {
       setWeather(null);
+      setForecast(null);
       setError('Cidade não encontrada');
     }
   }
@@ -50,11 +58,12 @@ export default function Home() {
 
       {/* Weather */}
       {weather && (
-      <div className="mt-10 w-full max-w-md rounded-3xl bg-white/15 backdrop-blur p-8">
-        <WeatherCard weather={weather} />
-        <WeatherDetails weather={weather} />
-      </div>
-)}
+        <div className="mt-10 w-full max-w-md rounded-3xl bg-white/15 backdrop-blur p-8">
+          <WeatherCard weather={weather} />
+          <WeatherDetails weather={weather} />
+        </div>
+      )}
+      {forecast && <Forecast forecast={forecast} />}
     </main>
   );
 }

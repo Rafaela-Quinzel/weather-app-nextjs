@@ -36,3 +36,19 @@ export interface WeatherResponse {
   visibility: number;
   sys: Sys;
 }
+
+export interface ForecastItem {
+  dt: number;
+  main: {
+    temp_min: number;
+    temp_max: number;
+  };
+  weather: {
+    description: string;
+    icon: string;
+  }[];
+}
+
+export interface ForecastResponse {
+  list: ForecastItem[];
+}

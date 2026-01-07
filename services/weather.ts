@@ -15,3 +15,15 @@ export async function getCurrentWeather(
 
   return response.json();
 }
+
+export async function getForecast(city: string) {
+  const response = await fetch(
+    `${API_URL}/forecast?q=${city}&units=metric&lang=pt_br&appid=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Erro ao buscar previsão');
+  }
+
+  return response.json();
+}
