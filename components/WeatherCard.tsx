@@ -6,10 +6,17 @@ interface WeatherCardProps {
 
 export function WeatherCard({ weather }: WeatherCardProps) {
   return (
-    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-md text-center">
+    <div className="
+  w-full max-w-md
+  rounded-2xl
+  bg-white/15
+  backdrop-blur
+  p-6
+  text-center
+">
       <h2 className="text-xl font-semibold">{weather.name}</h2>
 
-      <p className="mt-2 text-5xl font-bold">
+      <p className="mt-1 capitalize opacity-80">
         {Math.round(weather.main.temp)}°C
       </p>
 
