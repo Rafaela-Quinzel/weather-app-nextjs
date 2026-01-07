@@ -49,10 +49,10 @@ export default function Home() {
 
       {/* Weather */}
       {weather && (
-        <div className="mt-10">
-          <WeatherCard weather={weather} />
-        </div>
-      )}
+      <div className="mt-10 w-full max-w-md rounded-3xl bg-white/15 backdrop-blur p-8">
+        <WeatherCard weather={weather} />
+      </div>
+)}
     </main>
   );
 }
