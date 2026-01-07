@@ -1,15 +1,35 @@
 import { WeatherResponse } from '@/types/weather';
-import { Sun, Wind, Droplets, Thermometer } from 'lucide-react';
+import { Wind, Droplets, Thermometer } from 'lucide-react';
+import { getWeatherIcon } from '@/utils/weatherIcons';
+import { isDaytime } from '@/utils/isDaytime';
 
 interface WeatherCardProps {
   weather: WeatherResponse;
 }
 
 export function WeatherCard({ weather }: WeatherCardProps) {
+  const isDay = isDaytime(
+    weather.dt,
+    weather.sys.sunrise,
+    weather.sys.sunset,
+    weather.timezone
+  );
+
+  const WeatherIcon = getWeatherIcon(
+    weather.weather[0].main,
+    isDay
+  );
+
   return (
     <section className="flex flex-col items-center text-white space-y-4">
       {/* Icon */}
-      <Sun className="h-16 w-16 opacity-90" />
+      <WeatherIcon
+        className={`
+          h-16 w-16
+          ${isDay ? 'text-yellow-300' : 'text-indigo-200'}
+        `}
+        strokeWidth={1.5}
+      />
 
       {/* City */}
       <p className="text-sm opacity-80">
@@ -40,7 +60,7 @@ export function WeatherCard({ weather }: WeatherCardProps) {
 
         <div className="flex items-center gap-1">
           <Wind size={14} />
-          <span>— km/h</span>
+          <span>{weather.wind.speed} km/h</span>
         </div>
       </div>
     </section>

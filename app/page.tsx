@@ -12,7 +12,6 @@ import { Forecast } from '@/components/Forecast';
 import { getCurrentWeather, getCurrentWeatherByCoords, getForecast, getForecastByCoords } from '@/services/weather';
 import { ForecastResponse, WeatherResponse } from '@/types/weather';
 import { getUserLocation } from '@/utils/geolocation';
-import { isDaytime } from '@/utils/isDaytime';
 
 export default function Home() {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
