@@ -35,6 +35,8 @@ export interface WeatherResponse {
   wind: Wind;
   visibility: number;
   sys: Sys;
+  dt: number;
+  timezone: number;
 }
 
 export interface ForecastItem {
