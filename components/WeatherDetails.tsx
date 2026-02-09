@@ -78,13 +78,13 @@ export function WeatherDetails({ weather }: WeatherDetailsProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="mt-8"
+      className="mt-14 w-full max-w-6xl"
     >
-      <h3 className="mb-4 text-xs uppercase tracking-wider text-white/50">
+      <h3 className="text-white/50 text-sm font-medium uppercase tracking-wider mb-4 px-1">
         Detalhes do clima
       </h3>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {details.map((detail, index) => (
           <DetailCard
             key={detail.label}

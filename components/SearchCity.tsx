@@ -15,7 +15,6 @@ interface SearchCityProps {
 export function SearchCity({ onSearch, isLoading }: SearchCityProps) {
   const [city, setCity] = useState('');
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
 
   const containerRef = useRef<HTMLFormElement>(null);
 
@@ -28,13 +27,11 @@ export function SearchCity({ onSearch, isLoading }: SearchCityProps) {
 
     const timeout = setTimeout(async () => {
       try {
-        setIsSearching(true);
         const results = await searchCities(city);
         setSuggestions(results);
       } catch {
         setSuggestions([]);
       } finally {
-        setIsSearching(false);
       }
     }, 400);
 

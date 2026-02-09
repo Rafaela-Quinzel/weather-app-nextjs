@@ -58,7 +58,7 @@ export default function Home() {
     }
 
     loadDefaultWeather();
-}, []);
+  }, []);
 
   async function handleSearch(city: string) {
     setIsLoading(true);
@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <main
-    className={`min-h-screen bg-linear-to-br ${getBackgroundGradient()} transition-all duration-1000 text-white`}
+      className={`min-h-screen bg-linear-to-br ${getBackgroundGradient()} transition-all duration-1000 text-white`}
     >
       <div className="relative z-10 flex flex-col items-center px-4 py-10">
 
@@ -167,21 +167,19 @@ export default function Home() {
               exit={{ opacity: 0 }}
               className="w-full flex flex-col items-center"
             >
-              <div className="mt-10 w-full max-w-md rounded-3xl bg-white/15 backdrop-blur p-8">
-                <WeatherCard weather={weather} />
+              <WeatherCard weather={weather} />
 
-                <WeatherDetails
-                  weather={{
-                    feelsLike: Math.round(weather.main.feels_like),
-                    humidity: weather.main.humidity,
-                    windSpeed: weather.wind.speed,
-                    visibility: weather.visibility / 1000,
-                    pressure: 0,
-                    sunrise: weather.sys.sunrise.toString(),
-                    sunset: weather.sys.sunset.toString(),
-                  }}
-                />
-              </div>
+              <WeatherDetails
+                weather={{
+                  feelsLike: Math.round(weather.main.feels_like),
+                  humidity: weather.main.humidity,
+                  windSpeed: weather.wind.speed,
+                  visibility: weather.visibility / 1000,
+                  pressure: 0,
+                  sunrise: weather.sys.sunrise.toString(),
+                  sunset: weather.sys.sunset.toString(),
+                }}
+              />
 
               {forecast && <Forecast forecast={forecast} />}
             </motion.div>

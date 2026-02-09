@@ -9,9 +9,34 @@ interface ForecastProps {
   forecast: ForecastResponse;
 }
 
+// Agrupa por data e pega o registro mais próximo do meio-dia para cada dia
 function getDailyForecast(list: ForecastResponse['list']) {
-  // pega 1 item por dia (a cada 24h ≈ 8 registros)
-  return list.filter((_, index) => index % 8 === 0).slice(0, 7);
+  if (!list || list.length === 0) return [];
+
+  // Agrupa por data (ano-mês-dia)
+  const grouped: { [date: string]: typeof list } = {};
+  list.forEach(item => {
+    const date = new Date(item.dt * 1000);
+    date.setHours(0, 0, 0, 0);
+    const key = date.toISOString().slice(0, 10); // yyyy-mm-dd
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(item);
+  });
+
+  // Seleciona o registro mais próximo do meio-dia para cada dia
+  const daily = Object.entries(grouped).map(([_, items]) => {
+    return items.reduce((prev, curr) => {
+      const prevHour = Math.abs(new Date(prev.dt * 1000).getHours() - 12);
+      const currHour = Math.abs(new Date(curr.dt * 1000).getHours() - 12);
+      return currHour < prevHour ? curr : prev;
+    });
+  });
+
+  // Ordena por data
+  daily.sort((a, b) => a.dt - b.dt);
+
+  // Limita a 6 dias (segunda a sábado, por exemplo)
+  return daily.slice(0, 6);
 }
 
 export function Forecast({ forecast }: ForecastProps) {

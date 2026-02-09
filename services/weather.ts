@@ -1,5 +1,3 @@
-import { WeatherResponse } from '@/types/weather';
-
 const API_URL = 'https://api.openweathermap.org/data/2.5';
 
 export async function getCurrentWeather(city: string) {
