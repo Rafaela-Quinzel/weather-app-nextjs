@@ -8,7 +8,7 @@ import {
   CloudFog,
 } from 'lucide-react';
 
-type WeatherCondition =
+export type WeatherCondition =
   | 'Clear'
   | 'Clouds'
   | 'Rain'

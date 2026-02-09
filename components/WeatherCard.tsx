@@ -1,6 +1,30 @@
 import { WeatherResponse } from '@/types/weather';
 import { Wind, Droplets, Thermometer } from 'lucide-react';
 import { getWeatherIcon } from '@/utils/weatherIcons';
+import type { WeatherCondition } from '@/utils/weatherIcons';
+import { Sun, Moon, Cloud, CloudRain, CloudSnow, CloudLightning, CloudFog } from 'lucide-react';
+const weatherIconMap: Record<WeatherCondition, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
+  Clear: Sun,
+  Clouds: Cloud,
+  Rain: CloudRain,
+  Drizzle: CloudRain,
+  Thunderstorm: CloudLightning,
+  Snow: CloudSnow,
+  Mist: CloudFog,
+  Fog: CloudFog,
+  Haze: CloudFog,
+};
+
+function selectWeatherIcon(condition: string, isDay: boolean) {
+  // Garante que o valor seja um WeatherCondition válido
+  const validConditions: WeatherCondition[] = [
+    'Clear', 'Clouds', 'Rain', 'Drizzle', 'Thunderstorm', 'Snow', 'Mist', 'Fog', 'Haze'
+  ];
+  const safeCondition = validConditions.includes(condition as WeatherCondition)
+    ? (condition as WeatherCondition)
+    : 'Clear';
+  return getWeatherIcon(safeCondition, isDay);
+}
 import { isDaytime } from '@/utils/isDaytime';
 
 interface WeatherCardProps {
@@ -9,21 +33,17 @@ interface WeatherCardProps {
 
 export function WeatherCard({ weather }: WeatherCardProps) {
   const isDay = isDaytime(
-    weather.dt,
     weather.sys.sunrise,
     weather.sys.sunset,
     weather.timezone
   );
-
-  const WeatherIcon = getWeatherIcon(
-    weather.weather[0].main,
-    isDay
-  );
+  const condition = weather.weather[0].main as WeatherCondition;
+  const IconComponent = weatherIconMap[condition] || (isDay ? Sun : Moon);
 
   return (
     <section className="flex flex-col items-center text-white space-y-4">
       {/* Icon */}
-      <WeatherIcon
+      <IconComponent
         className={`
           h-16 w-16
           ${isDay ? 'text-yellow-300' : 'text-indigo-200'}

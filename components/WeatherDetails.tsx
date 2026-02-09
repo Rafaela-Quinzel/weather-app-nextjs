@@ -29,7 +29,7 @@ const DetailCard = ({
   value,
   delay,
 }: {
-  icon: React.ReactNode;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
   value: string;
   delay: number;
@@ -69,8 +69,8 @@ export function WeatherDetails({ weather }: WeatherDetailsProps) {
     { icon: Wind, label: 'Vento', value: `${weather.windSpeed} km/h`, delay: 0.2 },
     { icon: Eye, label: 'Visibilidade', value: `${weather.visibility} km`, delay: 0.25 },
     { icon: Gauge, label: 'Pressão', value: `${weather.pressure} hPa`, delay: 0.3 },
-    { icon: Sunrise, label: 'Nascer do Sol', value: formatTime(weather.sunrise), delay: 0.35 },
-    { icon: Sunset, label: 'Pôr do Sol', value: formatTime(weather.sunset), delay: 0.4 },
+    { icon: Sunrise, label: 'Nascer do Sol', value: formatTime(Number(weather.sunrise)), delay: 0.35 },
+    { icon: Sunset, label: 'Pôr do Sol', value: formatTime(Number(weather.sunset)), delay: 0.4 },
   ];
 
   return (

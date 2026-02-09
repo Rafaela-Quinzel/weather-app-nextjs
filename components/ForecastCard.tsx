@@ -11,8 +11,12 @@ import {
   CloudFog,
 } from 'lucide-react';
 
+interface ForecastCardProps {
+  day: ForecastItem;
+  index: number;
+}
 
-const weatherIcons: Record<string, any> = {
+const weatherIcons: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   Clear: Sun,
   Clouds: Cloud,
   Rain: CloudRain,
@@ -23,11 +27,6 @@ const weatherIcons: Record<string, any> = {
   Fog: CloudFog,
   Haze: CloudFog,
 };
-
-interface ForecastCardProps {
-  day: ForecastItem;
-  index: number;
-}
 
 function getDayName(timestamp: number) {
   return new Date(timestamp * 1000).toLocaleDateString('pt-BR', {
