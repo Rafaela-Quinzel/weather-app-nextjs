@@ -30,7 +30,7 @@ export function WeatherCard({ weather }: WeatherCardProps) {
   const condition = weather.weather[0].main as WeatherCondition;
   const IconComponent = weatherIconMap[condition] || (isDay ? Sun : Moon);
   return (
-    <section className="w-full max-w-6xl flex flex-col items-center text-white space-y-4">
+    <section className="w-full max-w-6xl flex flex-col items-center text-white space-y-4 mt-10">
       {/* Icon */}
       <IconComponent
         className={`

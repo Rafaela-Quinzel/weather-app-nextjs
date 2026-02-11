@@ -1,6 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+// Função para normalizar strings (remover acentos e caracteres especiais)
+function normalize(str: string) {
+  return str.normalize('NFD').replace(/[^\w\s]/gi, '').toLowerCase();
+}
 import { Search, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,17 +25,20 @@ export function SearchCity({ onSearch, isLoading }: SearchCityProps) {
   // Debounce da busca
   useEffect(() => {
     if (city.length < 3) {
-      setSuggestions([]);
+      // Não faz nada, sugestões permanecem como estão
       return;
     }
 
     const timeout = setTimeout(async () => {
       try {
         const results = await searchCities(city);
-        setSuggestions(results);
+        // Filtra sugestões no front-end, ignorando acentos/caracteres especiais
+        const filtered = results.filter((item: CitySuggestion) =>
+          normalize(item.name).includes(normalize(city))
+        );
+        setSuggestions(filtered);
       } catch {
         setSuggestions([]);
-      } finally {
       }
     }, 400);
 
